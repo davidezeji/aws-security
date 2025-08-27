@@ -1,7 +1,7 @@
 # AWS Security Projects
 These projects demonstrate AWS security best practices, advanced data protection, AWS compliance controls using automation, proactive measures to defend against security threats and DDoS attacks.
 
-Tech Stack:
+**Tech Stack:**
 - AWS Config
 - AWS Security Hub
 - AWS Trusted Advisor 
@@ -44,7 +44,7 @@ I also created some additional config rules via cloudformation to:
 - ensure no public IPs for ec2 instances (stops them, doesn't delete them)
 - approve AMI's by tag/ID
 
-** In order to enforce compliance for these rules I added onto the cloudformation scripts autoremediation steps for noncompliant resources (scripts can be found in the "config-remediation" folder)
+** In order to enforce compliance for these rules I added onto the cloudformation scripts auto-remediation steps for noncompliant resources (scripts can be found in the "config-remediation" folder)
 
 Example: Here is my deployment of the cloudformation script to ensure s3 bucket versioning is enabled across my AWS account.
 
