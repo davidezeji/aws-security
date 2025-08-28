@@ -40,8 +40,8 @@ What the stack actually does:
 
 5. You can also confirm the action of cloudtrail logging being stopped, and all the metadata associated with that event in both GuardDuty and SecurityHub
 
-GuardDuty:
+**GuardDuty:**
 ![Alt text](photos/guardduty1.png)
 
-SecurityHub:
+**SecurityHub:**
 ![Alt text](photos/securityhub1.png)
