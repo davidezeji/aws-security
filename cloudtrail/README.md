@@ -2,7 +2,7 @@
 
 **Scenario:** A malicious actor tries to disable CloudTrail in an AWS account to cover their tracks of malicious activity.
 
-**Goal:** Create a cloudwatch events rule that identifies the attempt to disable CloudTrail, this then creates an SNS topic that alerts the security team and use the same event to trigger a lambda function that re-enables CloudTrail logging ensuring that this service is never be permanently disabled. The setup for this project can be found/deployed using the cloudformation template in this directory called "cloudtrail-auto-remediation.template".
+**Goal:** Create a cloudwatch events rule that identifies the attempt to disable CloudTrail, this then creates an SNS topic that alerts the security team and use the same event to trigger a lambda function that re-enables CloudTrail logging ensuring that this service is never permanently disabled. The setup for this project can be found/deployed using the cloudformation template in this directory called "cloudtrail-auto-remediation.template".
 
 **Prerequisites:**
 - Enable CloudTrail in your account(s) (create a trail if you don't have one)
