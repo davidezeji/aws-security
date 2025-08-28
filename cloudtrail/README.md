@@ -10,6 +10,7 @@
 - Enable SecurityHub in your account(s)
 
 **Cloudtrail-auto-remediation Cloudformation Script Breakdown:**
+
 What the stack actually does:
 - Creates two Lambda functions that can:
     - Detect when CloudTrail logging is stopped (via EventBridge rule or Security Hub finding).
