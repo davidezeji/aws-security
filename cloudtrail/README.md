@@ -25,8 +25,8 @@ What the stack actually does:
 ## Steps
 1. Upload cloudformation stack in AWS account
 
-**Note: when getting ready to deploy the CloudFormation stack make sure to enter in the email of your security team when prompted 
-![Alt text](photos/cloudformation1.png)
+    **Note: when getting ready to deploy the CloudFormation stack make sure to enter in the email of your security team when prompted 
+    ![Alt text](photos/cloudformation1.png)
 
 2. Make sure to subscribe to the SNS topic notifications via an initial email that is sent out
 ![Alt text](photos/email.png)
@@ -40,8 +40,8 @@ What the stack actually does:
 
 5. You can also confirm the action of cloudtrail logging being stopped, and all the metadata associated with that event in both GuardDuty and SecurityHub
 
-**GuardDuty:**
-![Alt text](photos/guardduty1.png)
+    **GuardDuty:**
+    ![Alt text](photos/guardduty1.png)
 
-**SecurityHub:**
-![Alt text](photos/securityhub1.png)
+    **SecurityHub:**
+    ![Alt text](photos/securityhub1.png)

@@ -11,4 +11,8 @@ These projects demonstrate AWS security best practices, advanced data protection
 - AWS Secrets Manager
 - AWS GuardDuty 
 - AWS WAF
+- AWS Step Functions
+- AWS Simple Notification Service
+- AWS Lambda
+
 
