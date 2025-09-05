@@ -37,4 +37,13 @@ Here is an overview of the cloudformation template (revoke-iam-access.template.j
     ![Alt text](photos/lambda1.png)
     ![Alt text](photos/lambda2.png)
 
-5. Log into another browser using the created user’s credentials and attempt to create a new user
+5. Log into another browser using the created user’s credentials and attempt to create a new IAM user or policy in the same AWS account.
+
+6. Cloudwatch events reports that a new user (“test-dummy-user”) was created, kicking off the remediation process
+![Alt text](photos/cloudwatch1.png)
+
+7. Now the IAM user which created the test-dummy-user has a deny iam policy attached to them, not allowing them to create further IAM resources
+![Alt text](photos/iam1.png)
+
+8. The user is now unable to create a second IAM user due to the attached policy
+![Alt text](photos/iam2.png)
