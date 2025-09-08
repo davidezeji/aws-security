@@ -2,7 +2,7 @@
 
 **Scenario:** This project shows how you can store database credentials in AWS Secrets Manager and avoid hardcoding them in applications. We will simulate how an application can make a request to an RDS database using API gateway and ensure that our credentials are continuously rotated (every 30 days) via Lambda.
 
-## Workflow
+### Workflow
 ```
 1. User makes request ---> 2. Request goes through API gateway (url output from CloudFormation) ---> 3. Trigger lambda to fetch secrets from secrets manager (on the backend secrets manager pulls them from RDS) ---> 4. credentials are given back to the user ---> 5. Lambda rotates secrets every 30 days
 ```
