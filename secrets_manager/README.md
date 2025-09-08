@@ -1,6 +1,11 @@
 # Secrets Manager
 
-**Scenario:** This project shows how you can store database credentials in AWS Secrets Manager and avoid hardcoding them in applications. We will simulate how an application can make a request to the database using API gateway and ensure that our credentials are continuously rotated (every 30 days) via Lambda.
+**Scenario:** This project shows how you can store database credentials in AWS Secrets Manager and avoid hardcoding them in applications. We will simulate how an application can make a request to an RDS database using API gateway and ensure that our credentials are continuously rotated (every 30 days) via Lambda.
+
+## Workflow
+```
+1. User makes request ---> 2. Request goes through API gateway (url output from CloudFormation) ---> 3. Trigger lambda to fetch secrets from secrets manager (on the backend secrets manager pulls them from RDS) ---> 4. credentials are given back to the user ---> 5. Lambda rotates secrets every 30 days
+```
 
 **Secrets Manager Cloudformation Script Breakdown:**
 
@@ -14,13 +19,8 @@ This CloudFormation template provisions a private RDS database with managed secr
 * Uses DynamoDB to keep track of RDS connections.
 * Configures IAM roles and security groups to enforce least-privilege access and secure communication between components.
 
-## Worfklow
-```
-1. User makes request ---> 2. Request goes through API gateway (url output from CloudFormation) ---> 3. Trigger lambda to fetch secrets from secrets manager (on the backend secrets manager pulls them from RDS) ---> 4. credentials are given back to the user ---> 5. Lambda rotates secrets every 30 days
-```
-
 ## Steps
-*Note: The cloudfomation script is incorrectly named "CloudTrailAutomation-David" in some of the screenshots below, but the main functionailty remains*
+*Note: The cloudfomation script is incorrectly named "CloudTrailAutomation-David" in some of the screenshots below, but the main functionalities remain*
 
 1. Deploy the CloudFormation script which creates all the necessary infrastructure/connections
 ![Alt text](photos/cloudformation1.png)
