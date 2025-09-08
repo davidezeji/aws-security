@@ -10,7 +10,8 @@ They would ultimately like to be able to revoke priviliges in case of such secur
 
 **Overview:** 
 
-Here is an overview of the cloudformation template (revoke-iam-access.template.json) used for this security project
+Here is an overview of the cloudformation template (revoke-iam-access.template.json) used for this security project:
+
 1. Create a "DENY-IAM" policy: An IAM policy which denies IAM permissions and takes precedence over all other IAM policies.
 2. Create Lambda function: This checks which group a user is a part of, if the user is part of the "admins" groups, no action will take place. However, if they are a part of another group the user will be given the "DENY-IAM" policy.
 3. Create an EventBridge rule: This is the source trigger for the lambda function. Eventrbridge will only be triggered if invoked by an IAM API event.
