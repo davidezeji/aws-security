@@ -30,5 +30,5 @@
 8. Execute attack command a couple of times (line 16 of script) and eventually the firewall should eventually block the attempts after 5 minutes
 ![Alt text](photos/ec2-3.png)
 
-9. Within five minutes access should be forbidden to your instance
+9. Within five minutes access should be forbidden to your ec2 instance
 ![Alt text](photos/ec2-4.png)
