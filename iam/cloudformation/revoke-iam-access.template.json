@@ -360,10 +360,6 @@
       }
     },
     "Outputs": {
-      "SecuirtyAutomationBy": {
-        "Description": "To know more about this automation stack, check out our github page.",
-        "Value": "https://github.com/miztiik/security-automation-remediate-unintended-iam-access"
-      },
       "LambdaFunction": {
         "Description": "The Quarantine Lambda Function",
         "Value": {

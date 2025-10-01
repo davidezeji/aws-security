@@ -634,7 +634,7 @@
               "Arn"
             ]
           },
-          "Runtime": "python3.7",
+          "Runtime": "python3.11",
           "FunctionName": "quarantine_ec2_instance",
           "Tags": [
             {
@@ -917,7 +917,7 @@
               "Arn"
             ]
           },
-          "Runtime": "python3.7",
+          "Runtime": "python3.11",
           "Environment": {
             "Variables": {
               "STATE_MACHINE_ARN": {
@@ -1138,10 +1138,6 @@
       }
     },
     "Outputs": {
-      "SecuirtyAutomationFrom": {
-        "Description": "To know more about this automation stack, check out our github page.",
-        "Value": "https://github.com/miztiik/security-automation-respond-to-failed-ssh-access"
-      },
       "MonitoredInstance": {
         "Description": "Web Server Public IP to attack",
         "Value": {
