@@ -12,3 +12,20 @@
 **Note:** This security setup can be deployed in your aws account using the CloudFromation template called "remediate-ssh-access.template.json" in this repository.
 
 ## Steps
+1. Deploy CloudFormation stack 
+![Alt text](photos/cfn1.png)
+
+2. Make sure to subscribe to the SNS topic in your email
+![Alt text](photos/sns1.png)
+
+3. Try to trigger a failure - currently there is no associated key pair to the instance created by the CloudFormation Stack. Therefore any attempt to SSH into the instance from your local machine will result in a failure
+![Alt text](photos/ec2-1.png)
+![Alt text](photos/ec2-2.png)
+
+4. These actions should have triggered the step functions based on cloudwatch logs and triggered the defined remeediation steps
+![Alt text](photos/functions1.png)
+
+5. As part of the remediation you should now see a new security group attached to the instance called infused-quarantine, this has no inbound/outbound rules effectively isolating the instance
+![Alt text](photos/sg1.png)
+![Alt text](photos/sg2.png)
+![Alt text](photos/sg3.png)
