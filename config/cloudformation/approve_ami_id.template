@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Miztiik Stack to Auto remediation configuration to stop or terminate EC2 instances running unapproved AMIs (by AMI ID)",
+    "Description": "Stack to Auto remediation configuration to stop or terminate EC2 instances running unapproved AMIs (by AMI ID)",
     "Resources": {
       "AWSConfigRule": {
         "Type": "AWS::Config::ConfigRule",

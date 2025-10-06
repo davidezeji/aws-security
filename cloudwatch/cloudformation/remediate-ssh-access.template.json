@@ -10,11 +10,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
+              "Value": "David"
             },
             {
               "Key": "ToKnowMore",
@@ -53,11 +49,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
+              "Value": "David"
             },
             {
               "Key": "ToKnowMore",
@@ -94,11 +86,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
+              "Value": "David"
             },
             {
               "Key": "ToKnowMore",
@@ -169,11 +157,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
+              "Value": "David"
             },
             {
               "Key": "ToKnowMore",
@@ -210,12 +194,9 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
+              "Value": "David"
             },
             {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
             {
               "Key": "ToKnowMore",
               "Value": "https://youtube.com/c/valaxytechnologies"
@@ -272,19 +253,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
-            },
-            {
-              "Key": "Name",
-              "Value": "security-automation-respond-to-failed-ssh-access/abacVPC"
+              "Value": "David"
             },
             {
               "Key": "ServiceProvider",
@@ -338,15 +307,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ],
           "VpcId": {
@@ -400,15 +361,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ]
         },
@@ -492,19 +445,11 @@
             },
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ],
           "UserData": {
-            "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n#!/bin/bash\n#!/bin/bash -xe\n\n# Lets log everything to console for being lazy (not recommended)\nexec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1\n\n# install httpd\nyum install httpd ec2-instance-connect -y\n\n# Installing SSM Agent\nmkdir -p /tmp/ssm \\\n    && yum install -y curl \\\n    && curl https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm -o /tmp/ssm/amazon-ssm-agent.rpm \\\n    && sudo yum install -y /tmp/ssm/amazon-ssm-agent.rpm \\\n    && sudo systemctl restart amazon-ssm-agent\n\n# Installing AWS CloudWatch Agent FOR AMAZON LINUX RPM\nagent_dir=\"/tmp/cw_agent\"\ncw_agent_rpm=\"https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm\"\nmkdir -p ${agent_dir} \\\n    && cd ${agent_dir} \\\n    && sudo yum install -y curl \\\n    && curl ${cw_agent_rpm} -o ${agent_dir}/amazon-cloudwatch-agent.rpm \\\n    && sudo rpm -U ${agent_dir}/amazon-cloudwatch-agent.rpm\n\n\ncw_agent_schema=\"/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json\"\n\ncat > '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json' << \"EOF\"\n{\n  \"agent\": {\n    \"metrics_collection_interval\": 5,\n    \"logfile\": \"/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log\"\n  },\n  \"metrics\": {\n    \"metrics_collected\": {\n      \"mem\": {\n        \"measurement\": [\n          \"mem_used_percent\"\n        ]\n      }\n    },\n    \"append_dimensions\": {\n      \"ImageId\": \"${aws:ImageId}\",\n      \"InstanceId\": \"${aws:InstanceId}\",\n      \"InstanceType\": \"${aws:InstanceType}\"\n    },\n    \"aggregation_dimensions\": [\n      [\n        \"InstanceId\",\n        \"InstanceType\"\n      ],\n      []\n    ]\n  },\n  \"logs\": {\n    \"logs_collected\": {\n      \"files\": {\n        \"collect_list\": [\n          {\n            \"file_path\": \"/var/log/secure\",\n            \"log_group_name\": \"/Mystique/InfoSec/Automation/{instance_id}\",\n            \"timestamp_format\": \"%b %-d %H:%M:%S\",\n            \"timezone\": \"Local\"\n          }\n        ]\n      }\n    },\n    \"log_stream_name\": \"{instance_id}\"\n  }\n}\nEOF\n\n# Configure the agent to monitor ssh log file\nsudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:${cw_agent_schema} -s\n# Start the CW Agent\nsudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status\n\n# Just in case we need to troubleshoot\ncd \"/opt/aws/amazon-cloudwatch-agent/logs/\"\n\n# sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a stop\n"
+            "Fn::Base64": "#!/bin/bash\n#!/bin/bash\n#!/bin/bash\n#!/bin/bash -xe\n\n# Lets log everything to console for being lazy (not recommended)\nexec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1\n\n# install httpd\nyum install httpd ec2-instance-connect -y\n\n# Installing SSM Agent\nmkdir -p /tmp/ssm \\\n    && yum install -y curl \\\n    && curl https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm -o /tmp/ssm/amazon-ssm-agent.rpm \\\n    && sudo yum install -y /tmp/ssm/amazon-ssm-agent.rpm \\\n    && sudo systemctl restart amazon-ssm-agent\n\n# Installing AWS CloudWatch Agent FOR AMAZON LINUX RPM\nagent_dir=\"/tmp/cw_agent\"\ncw_agent_rpm=\"https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm\"\nmkdir -p ${agent_dir} \\\n    && cd ${agent_dir} \\\n    && sudo yum install -y curl \\\n    && curl ${cw_agent_rpm} -o ${agent_dir}/amazon-cloudwatch-agent.rpm \\\n    && sudo rpm -U ${agent_dir}/amazon-cloudwatch-agent.rpm\n\n\ncw_agent_schema=\"/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json\"\n\ncat > '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json' << \"EOF\"\n{\n  \"agent\": {\n    \"metrics_collection_interval\": 5,\n    \"logfile\": \"/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log\"\n  },\n  \"metrics\": {\n    \"metrics_collected\": {\n      \"mem\": {\n        \"measurement\": [\n          \"mem_used_percent\"\n        ]\n      }\n    },\n    \"append_dimensions\": {\n      \"ImageId\": \"${aws:ImageId}\",\n      \"InstanceId\": \"${aws:InstanceId}\",\n      \"InstanceType\": \"${aws:InstanceType}\"\n    },\n    \"aggregation_dimensions\": [\n      [\n        \"InstanceId\",\n        \"InstanceType\"\n      ],\n      []\n    ]\n  },\n  \"logs\": {\n    \"logs_collected\": {\n      \"files\": {\n        \"collect_list\": [\n          {\n            \"file_path\": \"/var/log/secure\",\n            \"log_group_name\": \"/David/InfoSec/Automation/{instance_id}\",\n            \"timestamp_format\": \"%b %-d %H:%M:%S\",\n            \"timezone\": \"Local\"\n          }\n        ]\n      }\n    },\n    \"log_stream_name\": \"{instance_id}\"\n  }\n}\nEOF\n\n# Configure the agent to monitor ssh log file\nsudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:${cw_agent_schema} -s\n# Start the CW Agent\nsudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status\n\n# Just in case we need to troubleshoot\ncd \"/opt/aws/amazon-cloudwatch-agent/logs/\"\n\n# sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a stop\n"
           }
         },
         "Metadata": {
@@ -518,7 +463,7 @@
             "Fn::Join": [
               "",
               [
-                "/Mystique/InfoSec/Automation/",
+                "/David/InfoSec/Automation/",
                 {
                   "Ref": "sshMonitoredInstance01"
                 }
@@ -565,15 +510,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ]
         },
@@ -625,7 +562,7 @@
         "Type": "AWS::Lambda::Function",
         "Properties": {
           "Code": {
-            "ZipFile": "# -*- coding: utf-8 -*-\n\"\"\"\n.. module: quarantine_ec2_instance\n    :Attaches: the instance a SG with no rules so it can't communicate with the outside world\n\"\"\"\n\nimport logging\nimport os\n\nimport boto3\nfrom botocore.exceptions import ClientError\n\n__author__      = 'Mystique'\n__email__       = 'miztiik@github'\n__version__     = '0.0.1'\n__status__      = 'production'\n\n\nclass global_args:\n    \"\"\"\n    Helper to define global statics\n    \"\"\"\n    TAG_NAME                    = 'quarantine_ec2_instance'\n    LOG_LEVEL                   = logging.INFO\n\n\ndef set_logging(lv=global_args.LOG_LEVEL):\n    '''\n    Helper to enable debugging\n    '''\n    logging.basicConfig(level=lv)\n    logger = logging.getLogger()\n    logger.setLevel(lv)\n    return logger\n\n\nlogger = set_logging(logging.INFO)\n\n\ndef get_qurantine_sg_id(inst_id):\n    ec2_resource = boto3.resource('ec2')\n    ec2_client = boto3.client('ec2')\n\n    q_sg_name=\"infosec-quarantine\"\n\n    inst_attr = ec2_client.describe_instances( InstanceIds=[inst_id] )['Reservations'][0]['Instances'][0]\n    if inst_attr:\n        inst_vpc_id = inst_attr.get('VpcId')\n\n    # Check or create the Quarantine SG\n    try:    \n        result = ec2_client.describe_security_groups(\n            Filters=[\n                    {\n                        'Name': 'group-name',\n                        'Values': [q_sg_name]\n                    },\n                    {\n                        'Name': 'vpc-id',\n                        'Values': [inst_vpc_id]\n                    }\n                ]\n            )\n        if result['SecurityGroups']: \n            quarantine_sg_id = result['SecurityGroups'][0]['GroupId']\n\n        else:\n            result = ec2_client.create_security_group(\n                    Description='Quarantine SG. No Ingress or Egress.',\n                    GroupName=q_sg_name,\n                    VpcId=inst_vpc_id \n                    )\n\n            security_group = ec2_resource.SecurityGroup(result['GroupId'])\n            delete_outbound_result = security_group.revoke_egress(\n                GroupId=result['GroupId'],\n                IpPermissions=[{'IpProtocol':'-1','IpRanges': [{'CidrIp':'0.0.0.0/0'}]}]\n                )\n            tag = security_group.create_tags(Tags=[\n                {'Key': 'Name','Value': \"QUARANTINE-SG\"}\n                ]\n            )\n            logger.info(f\"New quarantine Security Group Created. sg_id: {result['GroupId']}\")\n            quarantine_sg_id = result['GroupId']\n        \n    except ClientError as e:\n        logger.info(f\"Unable to find/create quarantine security group.ERROR: {str(e)}\")\n        exit\n\n    return quarantine_sg_id\n\ndef quarantine_ec2_instance(inst_id, quarantine_sg_id):\n    resp = {'status': False, 'message': {} }\n    ec2_resource = boto3.resource('ec2')\n    # Attach the instance to only the quarantine SG\n    try:\n        result = ec2_resource.Instance(inst_id).modify_attribute(Groups=[quarantine_sg_id])  \n        responseCode = result['ResponseMetadata']['HTTPStatusCode']\n        if responseCode >= 400:\n            resp['error_message'] = str(result)\n        else:\n            logger.info(f\"Instance:{inst_id} quarantined with SG:{quarantine_sg_id}\")\n            resp['status'] = True\n            resp['message'] = {'instance_id':inst_id, 'qurantine_sg_added':True, 'qurantine_sg_id': quarantine_sg_id}\n    except ClientError as e:\n        resp['message'] = {'instance_id':inst_id, 'qurantine_sg_added':False, 'error_message':str(e)}\n    return resp\n\n\ndef lambda_handler(event, context):\n    resp = {'status':False}\n    if 'inst_id' in event:\n        inst_id = event.get('inst_id')\n        if inst_id:\n            logger.info(f\"Going to qurantine Instance :{inst_id}\")\n            quarantine_sg_id = get_qurantine_sg_id(inst_id)\n            resp = quarantine_ec2_instance(inst_id, quarantine_sg_id)\n            resp['message']['event_logs'] = event['message']\n    else:\n        resp['message'] = f\"Instance ID is missing. Unable to Qurantine\"\n        resp['error_message']=f\"Instance ID is missing. Unable to Qurantine\"\n    return resp\n"
+            "ZipFile": "# -*- coding: utf-8 -*-\n\"\"\"\n.. module: quarantine_ec2_instance\n    :Attaches: the instance a SG with no rules so it can't communicate with the outside world\n\"\"\"\n\nimport logging\nimport os\n\nimport boto3\nfrom botocore.exceptions import ClientError\n\n__author__      = 'David'\n__email__       = 'davidezeji@github'\n__version__     = '0.0.1'\n__status__      = 'production'\n\n\nclass global_args:\n    \"\"\"\n    Helper to define global statics\n    \"\"\"\n    TAG_NAME                    = 'quarantine_ec2_instance'\n    LOG_LEVEL                   = logging.INFO\n\n\ndef set_logging(lv=global_args.LOG_LEVEL):\n    '''\n    Helper to enable debugging\n    '''\n    logging.basicConfig(level=lv)\n    logger = logging.getLogger()\n    logger.setLevel(lv)\n    return logger\n\n\nlogger = set_logging(logging.INFO)\n\n\ndef get_qurantine_sg_id(inst_id):\n    ec2_resource = boto3.resource('ec2')\n    ec2_client = boto3.client('ec2')\n\n    q_sg_name=\"infosec-quarantine\"\n\n    inst_attr = ec2_client.describe_instances( InstanceIds=[inst_id] )['Reservations'][0]['Instances'][0]\n    if inst_attr:\n        inst_vpc_id = inst_attr.get('VpcId')\n\n    # Check or create the Quarantine SG\n    try:    \n        result = ec2_client.describe_security_groups(\n            Filters=[\n                    {\n                        'Name': 'group-name',\n                        'Values': [q_sg_name]\n                    },\n                    {\n                        'Name': 'vpc-id',\n                        'Values': [inst_vpc_id]\n                    }\n                ]\n            )\n        if result['SecurityGroups']: \n            quarantine_sg_id = result['SecurityGroups'][0]['GroupId']\n\n        else:\n            result = ec2_client.create_security_group(\n                    Description='Quarantine SG. No Ingress or Egress.',\n                    GroupName=q_sg_name,\n                    VpcId=inst_vpc_id \n                    )\n\n            security_group = ec2_resource.SecurityGroup(result['GroupId'])\n            delete_outbound_result = security_group.revoke_egress(\n                GroupId=result['GroupId'],\n                IpPermissions=[{'IpProtocol':'-1','IpRanges': [{'CidrIp':'0.0.0.0/0'}]}]\n                )\n            tag = security_group.create_tags(Tags=[\n                {'Key': 'Name','Value': \"QUARANTINE-SG\"}\n                ]\n            )\n            logger.info(f\"New quarantine Security Group Created. sg_id: {result['GroupId']}\")\n            quarantine_sg_id = result['GroupId']\n        \n    except ClientError as e:\n        logger.info(f\"Unable to find/create quarantine security group.ERROR: {str(e)}\")\n        exit\n\n    return quarantine_sg_id\n\ndef quarantine_ec2_instance(inst_id, quarantine_sg_id):\n    resp = {'status': False, 'message': {} }\n    ec2_resource = boto3.resource('ec2')\n    # Attach the instance to only the quarantine SG\n    try:\n        result = ec2_resource.Instance(inst_id).modify_attribute(Groups=[quarantine_sg_id])  \n        responseCode = result['ResponseMetadata']['HTTPStatusCode']\n        if responseCode >= 400:\n            resp['error_message'] = str(result)\n        else:\n            logger.info(f\"Instance:{inst_id} quarantined with SG:{quarantine_sg_id}\")\n            resp['status'] = True\n            resp['message'] = {'instance_id':inst_id, 'qurantine_sg_added':True, 'qurantine_sg_id': quarantine_sg_id}\n    except ClientError as e:\n        resp['message'] = {'instance_id':inst_id, 'qurantine_sg_added':False, 'error_message':str(e)}\n    return resp\n\n\ndef lambda_handler(event, context):\n    resp = {'status':False}\n    if 'inst_id' in event:\n        inst_id = event.get('inst_id')\n        if inst_id:\n            logger.info(f\"Going to qurantine Instance :{inst_id}\")\n            quarantine_sg_id = get_qurantine_sg_id(inst_id)\n            resp = quarantine_ec2_instance(inst_id, quarantine_sg_id)\n            resp['message']['event_logs'] = event['message']\n    else:\n        resp['message'] = f\"Instance ID is missing. Unable to Qurantine\"\n        resp['error_message']=f\"Instance ID is missing. Unable to Qurantine\"\n    return resp\n"
           },
           "Handler": "index.lambda_handler",
           "Role": {
@@ -639,15 +576,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ],
           "Timeout": 5
@@ -667,15 +596,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ],
           "TopicName": "InfoSecOpsTopic"
@@ -726,15 +647,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ]
         },
@@ -813,15 +726,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ]
         },
@@ -861,15 +766,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ]
         },
@@ -908,7 +805,7 @@
         "Type": "AWS::Lambda::Function",
         "Properties": {
           "Code": {
-            "ZipFile": "# -*- coding: utf-8 -*-\n\"\"\"\n.. module: trigger_state_machine\n    :Actions: Trigger state machine for given arn\n    :platform: AWS\n    :copyright: (c) 2020 Mystique.,\n    :license: Apache, see LICENSE for more details.\n.. moduleauthor:: Mystique\n.. contactauthor:: miztiik@github issues\n\"\"\"\n\nimport json\nimport logging\nimport base64\nimport urllib\nimport zlib\nimport os\n\nimport boto3\nfrom botocore.exceptions import ClientError\n\n__author__      = 'Mystique'\n__email__       = 'miztiik@github'\n__version__     = '0.0.1'\n__status__      = 'production'\n\n\"\"\"\nGENERIC HELPERS\n\"\"\"\n\nclass global_args:\n    \"\"\"\n    Helper to define global statics\n    \"\"\"\n    OWNER                       = 'Mystique'\n    ENVIRONMENT                 = 'production'\n    TAG_NAME                    = 'trigger_state_machine'\n    LOG_LEVEL                   = logging.INFO\n\n\ndef set_logging(lv=global_args.LOG_LEVEL):\n    '''\n    Helper to enable debugging\n    '''\n    logging.basicConfig(level=lv)\n    logger = logging.getLogger()\n    logger.setLevel(lv)\n    return logger\n\n\n# Initialize Logger\nlogger = set_logging(logging.INFO)\n\n\ndef trigger_state_machine(event):\n    resp = {'status': False,}\n    client = boto3.client('stepfunctions')\n    try:\n        if 'STATE_MACHINE_ARN' in os.environ:\n            logger.info(f'Logs:{event}')\n            resp['message'] = client.start_execution(\n                stateMachineArn=os.environ.get('STATE_MACHINE_ARN'),\n                input=json.dumps({\n                        'inst_id': event.get('inst_id'),\n                        'message':event.get('message')\n                        }\n                    )\n                )\n            resp['status'] = True\n    except ClientError as e:\n        logger.error(f\"Something went wrong. ERROR:{str(e)}\")\n        resp['error_message'] = str(e)\n    return resp\n\n\ndef awslogs_handler(event):\n    resp = {'status': False,}\n    if 'awslogs' in event:\n        if 'data' in event['awslogs']:\n            try:\n                log_data = zlib.decompress(base64.b64decode(event[\"awslogs\"][\"data\"]), 16 + zlib.MAX_WBITS)\n                log_data = log_data.decode(\"utf-8\")\n                resp['logs'] = json.loads(log_data)\n                resp['inst_id'] = resp['logs'].get('logStream')\n                resp['message'] = resp['logs'].get('logEvents')[0].get('message')\n                resp['status'] = True\n            except ClientError as e:\n                logger.error(f\"Something went wrong. ERROR:{str(e)}\")\n                resp['error_message'] = str(e)\n    return resp\n\n\ndef lambda_handler(event, context):\n    resp = {'status': False}\n    # logger.info(f'Event:{event}')\n    event = awslogs_handler(event)\n    resp = trigger_state_machine(event)\n    # t_resp = trigger_state_machine(event)\n    # resp['status'] = t_resp.pop('status', None)\n    return resp\n\n\nif __name__ == '__main__':\n    lambda_handler({}, {})\n"
+            "ZipFile": "# -*- coding: utf-8 -*-\n\"\"\"\n.. module: trigger_state_machine\n    :Actions: Trigger state machine for given arn\n    :platform: AWS\n    :copyright: (c) 2020 David.,\n    :license: Apache, see LICENSE for more details.\n.. moduleauthor:: David\n.. contactauthor:: davidezeji@github issues\n\"\"\"\n\nimport json\nimport logging\nimport base64\nimport urllib\nimport zlib\nimport os\n\nimport boto3\nfrom botocore.exceptions import ClientError\n\n__author__      = 'David'\n__email__       = 'davidezeji@github'\n__version__     = '0.0.1'\n__status__      = 'production'\n\n\"\"\"\nGENERIC HELPERS\n\"\"\"\n\nclass global_args:\n    \"\"\"\n    Helper to define global statics\n    \"\"\"\n    OWNER                       = 'David'\n    ENVIRONMENT                 = 'production'\n    TAG_NAME                    = 'trigger_state_machine'\n    LOG_LEVEL                   = logging.INFO\n\n\ndef set_logging(lv=global_args.LOG_LEVEL):\n    '''\n    Helper to enable debugging\n    '''\n    logging.basicConfig(level=lv)\n    logger = logging.getLogger()\n    logger.setLevel(lv)\n    return logger\n\n\n# Initialize Logger\nlogger = set_logging(logging.INFO)\n\n\ndef trigger_state_machine(event):\n    resp = {'status': False,}\n    client = boto3.client('stepfunctions')\n    try:\n        if 'STATE_MACHINE_ARN' in os.environ:\n            logger.info(f'Logs:{event}')\n            resp['message'] = client.start_execution(\n                stateMachineArn=os.environ.get('STATE_MACHINE_ARN'),\n                input=json.dumps({\n                        'inst_id': event.get('inst_id'),\n                        'message':event.get('message')\n                        }\n                    )\n                )\n            resp['status'] = True\n    except ClientError as e:\n        logger.error(f\"Something went wrong. ERROR:{str(e)}\")\n        resp['error_message'] = str(e)\n    return resp\n\n\ndef awslogs_handler(event):\n    resp = {'status': False,}\n    if 'awslogs' in event:\n        if 'data' in event['awslogs']:\n            try:\n                log_data = zlib.decompress(base64.b64decode(event[\"awslogs\"][\"data\"]), 16 + zlib.MAX_WBITS)\n                log_data = log_data.decode(\"utf-8\")\n                resp['logs'] = json.loads(log_data)\n                resp['inst_id'] = resp['logs'].get('logStream')\n                resp['message'] = resp['logs'].get('logEvents')[0].get('message')\n                resp['status'] = True\n            except ClientError as e:\n                logger.error(f\"Something went wrong. ERROR:{str(e)}\")\n                resp['error_message'] = str(e)\n    return resp\n\n\ndef lambda_handler(event, context):\n    resp = {'status': False}\n    # logger.info(f'Event:{event}')\n    event = awslogs_handler(event)\n    resp = trigger_state_machine(event)\n    # t_resp = trigger_state_machine(event)\n    # resp['status'] = t_resp.pop('status', None)\n    return resp\n\n\nif __name__ == '__main__':\n    lambda_handler({}, {})\n"
           },
           "Handler": "index.lambda_handler",
           "Role": {
@@ -929,15 +826,7 @@
           "Tags": [
             {
               "Key": "Owner",
-              "Value": "Mystique"
-            },
-            {
-              "Key": "OwnerProfile",
-              "Value": "https://github.com/miztiik"
-            },
-            {
-              "Key": "ToKnowMore",
-              "Value": "https://youtube.com/c/valaxytechnologies"
+              "Value": "David"
             }
           ],
           "Timeout": 5
@@ -1016,7 +905,7 @@
           "MetricTransformations": [
             {
               "MetricName": "tooManySshDisconnects",
-              "MetricNamespace": "MystiqueInfoSecurity",
+              "MetricNamespace": "DavidInfoSecurity",
               "MetricValue": "1"
             }
           ]
@@ -1035,7 +924,7 @@
           "MetricTransformations": [
             {
               "MetricName": "invalidSshUser",
-              "MetricNamespace": "MystiqueInfoSecurity",
+              "MetricNamespace": "DavidInfoSecurity",
               "MetricValue": "1"
             }
           ]
@@ -1054,7 +943,7 @@
           "MetricTransformations": [
             {
               "MetricName": "invalidSshKey",
-              "MetricNamespace": "MystiqueInfoSecurity",
+              "MetricNamespace": "DavidInfoSecurity",
               "MetricValue": "1"
             }
           ]
@@ -1073,7 +962,7 @@
           "AlarmName": "too_many_ssh_disconnects_alarm",
           "DatapointsToAlarm": 1,
           "MetricName": "tooManySshDisconnects",
-          "Namespace": "MystiqueInfoSecurity",
+          "Namespace": "DavidInfoSecurity",
           "Period": 60,
           "Statistic": "Sum",
           "Threshold": 5
@@ -1097,7 +986,7 @@
           "AlarmName": "too_many_invalid_ssh_users_alarm",
           "DatapointsToAlarm": 1,
           "MetricName": "invalidSshUser",
-          "Namespace": "MystiqueInfoSecurity",
+          "Namespace": "DavidInfoSecurity",
           "Period": 60,
           "Statistic": "Sum",
           "Threshold": 5
@@ -1121,7 +1010,7 @@
           "AlarmName": "too_many_invalid_ssh_key_alarm",
           "DatapointsToAlarm": 1,
           "MetricName": "invalidSshKey",
-          "Namespace": "MystiqueInfoSecurity",
+          "Namespace": "DavidInfoSecurity",
           "Period": 60,
           "Statistic": "Sum",
           "Threshold": 5

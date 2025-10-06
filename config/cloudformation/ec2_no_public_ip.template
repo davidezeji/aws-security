@@ -1,5 +1,5 @@
 {
-    "Description": "Miztiik Stack to Auto remediation configuration to stop or terminate EC2 instances with public IP addresses. Detection uses a managed AWS Config Rule and remediation is with SSM Automation.",
+    "Description": "Stack to Auto remediation configuration to stop or terminate EC2 instances with public IP addresses. Detection uses a managed AWS Config Rule and remediation is with SSM Automation.",
     "Resources": {
       "RemediationForConfigRule": {
         "Type": "AWS::Config::RemediationConfiguration",
