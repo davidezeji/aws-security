@@ -47,5 +47,6 @@
 ![Alt text](photos/ec2-8.png)
 
 - Now try a non-whitelisted domain and you should notice the private instance cannot connect to it (before setting up the proxy we did not get an “access denied” message, the request just hung up, but now we can clearly see the proxy is blocking the outbound routing from happening)
+
 ![Alt text](photos/ec2-9.png)
 ![Alt text](photos/ec2-10.png)
